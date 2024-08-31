@@ -2,6 +2,7 @@ import useSWR from 'swr'
 
 import { getProducts } from '@/data/api/product'
 import Layout from '@/components/Layout'
+import Products from '@/components/Products'
 
 const fetcher = () => getProducts()
 
@@ -16,14 +17,7 @@ const HomePage = () => {
   return (
     <Layout>
       <h1>Products</h1>
-      <ul>
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        {data.map((product: any) => (
-          <li key={product.id}>
-            {product.name} - ${product.price}
-          </li>
-        ))}
-      </ul>
+      <Products products={data} />
     </Layout>
   )
 }

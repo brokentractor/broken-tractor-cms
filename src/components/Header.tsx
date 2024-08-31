@@ -9,9 +9,6 @@ const Header = () => {
             Broken Tractor
           </p>
         </Link>
-        <p className="">
-          Login
-        </p>
       </div>
     </header>
 

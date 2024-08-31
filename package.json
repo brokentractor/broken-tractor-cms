@@ -10,11 +10,14 @@
     "lint:fix": "next lint --fix"
   },
   "dependencies": {
+    "add": "^2.0.6",
+    "dayjs": "^1.11.13",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
     "swr": "^2.2.5",
-    "universal-cookie": "^7.2.0"
+    "universal-cookie": "^7.2.0",
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "@types/node": "^20",
