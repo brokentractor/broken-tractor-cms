@@ -127,6 +127,11 @@ module.exports = {
             'position': 'after',
           },
           {
+            'pattern': '@/config/**',
+            'group': 'external',
+            'position': 'after',
+          },
+          {
             'pattern': '@/contexts/**',
             'group': 'external',
             'position': 'after',
