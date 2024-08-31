@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { BIGCOMMERCE_BASE_URL } from '@/config'
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
   try {
     const accessToken = process.env.BIGCOMMERCE_ACCESS_TOKEN
     
