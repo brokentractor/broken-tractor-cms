@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import dayjs from 'dayjs'
+
+import type { TOptionSet } from '@/interfaces/option-set'
 import type { TProduct } from '@/interfaces/product'
 
 type ProductsProps = {
   products: TProduct[]
+  optionSets: TOptionSet[]
 }
 
-const Products = ({ products }: ProductsProps) => {
+const Products = ({ products, optionSets }: ProductsProps) => {
   const [ selectedProducts, setSelectedProducts ] = useState<Set<number>>(new Set())
   const [ selectAll, setSelectAll ] = useState(false)
 
@@ -60,7 +63,7 @@ const Products = ({ products }: ProductsProps) => {
               Product name
             </th>
             <th scope="col" className="px-6 py-3">
-              Type
+              Option Set
             </th>
             <th scope="col" className="px-6 py-3">
               Date Created
@@ -89,7 +92,9 @@ const Products = ({ products }: ProductsProps) => {
                 {product.name}
               </th>
               <td className="px-6 py-4">
-                {product.type}
+                {product.option_set_id ? 
+                  optionSets.find((optionSet) => optionSet.id === product.option_set_id)?.name 
+                  : '-'}
               </td>
               <td className="px-6 py-4">
                 {dayjs(product.date_created).format('MM/DD/YYYY')}

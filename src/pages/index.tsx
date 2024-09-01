@@ -17,8 +17,7 @@ const HomePage = () => {
 
   return (
     <Layout>
-      <h1>Products</h1>
-      <Products products={products} />
+      <Products products={products} optionSets={optionSets} />
     </Layout>
   )
 }
