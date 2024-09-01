@@ -45,7 +45,7 @@ const Products = ({ products, optionSets }: ProductsProps) => {
   
   return (
     <div className="relative my-20 overflow-x-auto shadow-md sm:rounded-lg">
-      <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+      <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
         <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
           <tr>
             <th scope="col" className="p-4">
@@ -101,7 +101,7 @@ const Products = ({ products, optionSets }: ProductsProps) => {
                 {dayjs(product.date_created).format('MM/DD/YYYY')}
               </td>
               <td className="flex items-center px-6 py-4">
-                <EditModal product={product} />
+                <EditModal product={product} optionSets={optionSets}/>
               </td>
             </tr>
           ))}
