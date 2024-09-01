@@ -6,7 +6,7 @@ import Layout from '@/components/Layout'
 import Products from '@/components/Products'
 
 const HomePage = () => {
-  const { data: products, error: productsError } = useSWR('products', getProducts)
+  const { data: products, error: productsError, mutate } = useSWR('products', getProducts)
   const { data: optionSets, error: optionSetsError } = useSWR('option-sets', getOptionSets)
 
   if (productsError || optionSetsError) return <div>Failed to load products</div>
@@ -17,7 +17,7 @@ const HomePage = () => {
 
   return (
     <Layout>
-      <Products products={products} optionSets={optionSets} />
+      <Products products={products} optionSets={optionSets} mutate={mutate}/>
     </Layout>
   )
 }

@@ -7,13 +7,15 @@ import {
 import Spinner from '../Spinner'
 import type { TOptionSet } from '@/interfaces/option-set'
 import type { TProduct } from '@/interfaces/product'
+import type { KeyedMutator } from 'swr'
 
 type EditModalProps = {
   product: TProduct
   optionSets: TOptionSet[]
+  mutate: KeyedMutator<TProduct[]>
 }
 
-const EditModal = ({ product, optionSets }: EditModalProps) => {
+const EditModal = ({ product, optionSets, mutate }: EditModalProps) => {
   const [ removeLoading, setRemoveLoading ] = useState(false)
   const [ updateLoading, setUpdateLoading ] = useState(false)
   const [ optionSetID, setOptionSetID ] = useState<number | undefined>(
@@ -32,6 +34,7 @@ const EditModal = ({ product, optionSets }: EditModalProps) => {
     }
     finally {
       setRemoveLoading(false)
+      mutate()
     }
   }
 
@@ -47,6 +50,7 @@ const EditModal = ({ product, optionSets }: EditModalProps) => {
       }
       finally {
         setUpdateLoading(false)
+        mutate()
       }
     }
   }
