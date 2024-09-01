@@ -9,13 +9,13 @@ import type { TOptionSet } from '@/interfaces/option-set'
 import type { TProduct } from '@/interfaces/product'
 import type { KeyedMutator } from 'swr'
 
-type EditMultipleModalProps = {
+type BatchEditModalProps = {
   selectedProducts: Set<number>
   optionSets: TOptionSet[]
   mutate: KeyedMutator<TProduct[]>
 }
 
-const EditMultipleModal = ({ selectedProducts, optionSets, mutate }: EditMultipleModalProps) => {
+const BatchEditModal = ({ selectedProducts, optionSets, mutate }: BatchEditModalProps) => {
   const [ removeLoading, setRemoveLoading ] = useState(false)
   const [ updateLoading, setUpdateLoading ] = useState(false)
   const [ optionSetID, setOptionSetID ] = useState<number | undefined>(undefined)
@@ -124,4 +124,4 @@ const EditMultipleModal = ({ selectedProducts, optionSets, mutate }: EditMultipl
   )
 }
 
-export default EditMultipleModal
+export default BatchEditModal

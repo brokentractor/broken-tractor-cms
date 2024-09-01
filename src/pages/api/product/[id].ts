@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: 'Invalid product ID' })
     }
 
-    const response = await fetch(`${BIGCOMMERCE_BASE_URL}/v2/products/${id}`, {
+    const response = await fetch(`${BIGCOMMERCE_BASE_URL}/products/${id}`, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
