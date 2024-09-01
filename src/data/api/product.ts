@@ -7,3 +7,14 @@ export const getProducts = async (): Promise<TProduct[]> => {
   }
   return response.json()
 }
+
+export const updateProduct = async (id: string, body: Partial<TProduct>): Promise<TProduct> => {
+  const response = await fetch(`/api/product/${id}`, { 
+    method: 'PUT',
+    body: JSON.stringify(body),
+  })
+  if (!response.ok) {
+    throw new Error('Failed to update product')
+  }
+  return response.json()
+}

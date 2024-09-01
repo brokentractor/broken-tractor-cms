@@ -1,5 +1,6 @@
 
 import { useState } from 'react'
+import { updateProduct } from '@/data/api/product'
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, 
 } from '@/components/ui/dialog'
@@ -10,11 +11,26 @@ type EditModalProps = {
 }
 
 const EditModal = ({ product }: EditModalProps) => {
+  const [ loading, setLoading ] = useState(false)
   const [ optionSetID, setOptionSetID ] = useState<string | undefined>(
     product.option_set_id !== null ? product.option_set_id.toString() : undefined,
   )
   
   console.log('optionSetID; ', optionSetID)
+
+  const removeOptionSetID = async () => {
+    setLoading(true)
+
+    try {
+      await updateProduct(product.id.toString(), { option_set_id: null })
+    }
+    catch (error) {
+      console.error('Failed to update product:', error)
+    }
+    finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <Dialog>
@@ -52,7 +68,7 @@ const EditModal = ({ product }: EditModalProps) => {
             <button 
               type="submit" 
               className="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:hover:bg-gray-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:dark:bg-gray-300 disabled:dark:hover:bg-gray-300"
-              disabled={!optionSetID || optionSetID === product.option_set_id.toString() || optionSetID === '0'}
+              disabled={!optionSetID || optionSetID === product.option_set_id?.toString() || optionSetID === '0'}
             >
               Update Option Set
             </button>
@@ -60,8 +76,9 @@ const EditModal = ({ product }: EditModalProps) => {
               type="submit" 
               className="rounded-lg bg-red-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:hover:bg-gray-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 disabled:dark:bg-gray-300 disabled:dark:hover:bg-gray-300"
               disabled={!product.option_set_id}
+              onClick={removeOptionSetID}
             >
-              Remove Option Set
+              {loading ? 'Loading' : 'Remove Option Set'}
             </button>
 
           </div>

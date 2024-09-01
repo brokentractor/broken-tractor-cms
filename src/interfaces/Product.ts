@@ -18,7 +18,7 @@ export type TProduct = {
   calculated_price: number
   categories: number[]
   brand_id: number
-  option_set_id: number
+  option_set_id: number | null
   option_set_display: string
   inventory_level: number
   inventory_warning_level: number
