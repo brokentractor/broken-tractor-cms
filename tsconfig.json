@@ -23,7 +23,8 @@
     "target": "esnext",
     "incremental": true,
     "paths": {
-      "@/*": [  "src/*" ]
+      "@/*": [  "src/*" ],
+      "@shadcn/*": ["./*"] 
     }
   },
   "exclude": [

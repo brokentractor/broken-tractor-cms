@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import dayjs from 'dayjs'
 
+import EditModal from './EditModal'
 import type { TOptionSet } from '@/interfaces/option-set'
 import type { TProduct } from '@/interfaces/product'
 
@@ -100,7 +101,7 @@ const Products = ({ products, optionSets }: ProductsProps) => {
                 {dayjs(product.date_created).format('MM/DD/YYYY')}
               </td>
               <td className="flex items-center px-6 py-4">
-                <a href="#" className="font-medium text-blue-600 hover:underline dark:text-blue-500">Edit</a>
+                <EditModal product={product} />
               </td>
             </tr>
           ))}
