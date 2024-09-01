@@ -3,23 +3,18 @@ import { BIGCOMMERCE_BASE_URL } from '@/config'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { id } = req.query // Extract the product ID from the URL
+    const { id } = req.query
+    
     const accessToken = process.env.BIGCOMMERCE_ACCESS_TOKEN
       
     if (!accessToken) {
       throw new Error('BIGCOMMERCE_ACCESS_TOKEN is not defined')
     }
 
-    // Ensure `id` is a string
     if (typeof id !== 'string') {
       return res.status(400).json({ error: 'Invalid product ID' })
     }
 
-    // Extract the request body
-    const body = req.body
-
-    console.log('body: ', body)
-    console.log('url: ', `${BIGCOMMERCE_BASE_URL}/v2/products/${id}`)
     const response = await fetch(`${BIGCOMMERCE_BASE_URL}/v2/products/${id}`, {
       method: 'PUT',
       headers: {
@@ -27,10 +22,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         'Content-Type': 'application/json',
         'X-Auth-Token': accessToken,
       },
-      body,
+      body: req.body,
     })
-    
-    console.log('response: ', response)
+
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`)
     }

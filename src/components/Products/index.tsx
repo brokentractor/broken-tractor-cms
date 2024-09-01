@@ -16,8 +16,6 @@ const Products = ({ products, optionSets, mutate }: ProductsProps) => {
   const [ selectedProducts, setSelectedProducts ] = useState<Set<number>>(new Set())
   const [ selectAll, setSelectAll ] = useState(false)
 
-  console.log('selectedProducts: ', selectedProducts)
-
   const handleCheckboxChange = (productId: number) => {
     setSelectedProducts((prevSelected) => {
       const newSelected = new Set(prevSelected)

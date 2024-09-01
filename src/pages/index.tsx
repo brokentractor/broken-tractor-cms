@@ -12,9 +12,6 @@ const HomePage = () => {
   if (productsError || optionSetsError) return <div>Failed to load products</div>
   if (!products || !optionSets) return <div>Loading...</div>
 
-  console.log('products: ', products)
-  console.log('optionSets: ', optionSets)
-
   return (
     <Layout>
       <Products products={products} optionSets={optionSets} mutate={mutate}/>
