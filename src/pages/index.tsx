@@ -4,13 +4,35 @@ import { getOptionSets } from '@/data/api/option-set'
 import { getProducts } from '@/data/api/product'
 import Layout from '@/components/Layout'
 import Products from '@/components/Products'
+import Spinner from '@/components/Spinner'
 
 const HomePage = () => {
   const { data: products, error: productsError, mutate } = useSWR('products', getProducts)
   const { data: optionSets, error: optionSetsError } = useSWR('option-sets', getOptionSets)
 
-  if (productsError || optionSetsError) return <div>Failed to load products</div>
-  if (!products || !optionSets) return <div>Loading...</div>
+  if (productsError || optionSetsError) {
+    return (
+      <Layout>
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="text-center">
+            <p className="text-lg font-medium">Failed to load products</p>
+          </div>
+        </div>
+      </Layout>
+    )
+  }
+
+  if (!products || !optionSets) {
+    return (
+      <Layout>
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="text-center">
+            <Spinner />
+          </div>
+        </div>
+      </Layout>
+    )
+  }
 
   return (
     <Layout>
