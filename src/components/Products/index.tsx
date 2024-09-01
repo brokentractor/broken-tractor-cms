@@ -2,6 +2,7 @@ import { useState } from 'react'
 import dayjs from 'dayjs'
 
 import EditModal from './EditModal'
+import EditMultipleModal from './EditMultipleModal'
 import type { TOptionSet } from '@/interfaces/option-set'
 import type { TProduct } from '@/interfaces/product'
 import type { KeyedMutator } from 'swr'
@@ -44,69 +45,76 @@ const Products = ({ products, optionSets, mutate }: ProductsProps) => {
   }
   
   return (
-    <div className="relative my-20 overflow-x-auto shadow-md sm:rounded-lg">
-      <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
-        <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th scope="col" className="p-4">
-              <div className="flex items-center">
-                <input 
-                  id="checkbox-all-search" 
-                  type="checkbox"
-                  checked={selectAll}
-                  onChange={handleSelectAllChange}
-                  className="size-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
-                />
-                <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
-              </div>
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Product name
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Option Set
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Date Created
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr key={product.id} className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
-              <td className="w-4 p-4">
+    <div className="my-20 ">
+      <EditMultipleModal 
+        selectedProducts={selectedProducts}
+        mutate={mutate}
+        optionSets={optionSets}
+      />
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
+          <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" className="p-4">
                 <div className="flex items-center">
                   <input 
-                    id="checkbox-table-search-1"
+                    id="checkbox-all-search" 
                     type="checkbox"
-                    checked={selectedProducts.has(product.id)}
-                    onChange={() => handleCheckboxChange(product.id)}
-                    className="size-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
+                    checked={selectAll}
+                    onChange={handleSelectAllChange}
+                    className="size-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
                   />
-                  <label htmlFor="checkbox-table-search-1" className="sr-only">checkbox</label>
+                  <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
                 </div>
-              </td>
-              <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
-                {product.name}
               </th>
-              <td className="px-6 py-4">
-                {product.option_set_id ? 
-                  optionSets.find((optionSet) => optionSet.id === product.option_set_id)?.name 
-                  : '-'}
-              </td>
-              <td className="px-6 py-4">
-                {dayjs(product.date_created).format('MM/DD/YYYY')}
-              </td>
-              <td className="flex items-center px-6 py-4">
-                <EditModal product={product} optionSets={optionSets} mutate={mutate} />
-              </td>
+              <th scope="col" className="px-6 py-3">
+              Product name
+              </th>
+              <th scope="col" className="px-6 py-3">
+              Option Set
+              </th>
+              <th scope="col" className="px-6 py-3">
+              Date Created
+              </th>
+              <th scope="col" className="px-6 py-3">
+              Action
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {products.map((product) => (
+              <tr key={product.id} className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                <td className="w-4 p-4">
+                  <div className="flex items-center">
+                    <input 
+                      id="checkbox-table-search-1"
+                      type="checkbox"
+                      checked={selectedProducts.has(product.id)}
+                      onChange={() => handleCheckboxChange(product.id)}
+                      className="size-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
+                    />
+                    <label htmlFor="checkbox-table-search-1" className="sr-only">checkbox</label>
+                  </div>
+                </td>
+                <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
+                  {product.name}
+                </th>
+                <td className="px-6 py-4">
+                  {product.option_set_id ? 
+                    optionSets.find((optionSet) => optionSet.id === product.option_set_id)?.name 
+                    : '-'}
+                </td>
+                <td className="px-6 py-4">
+                  {dayjs(product.date_created).format('MM/DD/YYYY')}
+                </td>
+                <td className="flex items-center px-6 py-4">
+                  <EditModal product={product} optionSets={optionSets} mutate={mutate} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
