@@ -1,4 +1,4 @@
-import type { TProduct } from '@/interfaces/Product'
+import type { TProduct } from '@/interfaces/product'
 
 export const getProducts = async (): Promise<TProduct[]> => {
   const response = await fetch('/api/product/list')

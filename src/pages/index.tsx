@@ -1,23 +1,24 @@
 import useSWR from 'swr'
 
+import { getOptionSets } from '@/data/api/option-set'
 import { getProducts } from '@/data/api/product'
 import Layout from '@/components/Layout'
 import Products from '@/components/Products'
 
-const fetcher = () => getProducts()
-
 const HomePage = () => {
-  const { data, error } = useSWR('products', fetcher)
+  const { data: products, error: productsError } = useSWR('products', getProducts)
+  const { data: optionSets, error: optionSetsError } = useSWR('option-sets', getOptionSets)
 
-  if (error) return <div>Failed to load products</div>
-  if (!data) return <div>Loading...</div>
+  if (productsError || optionSetsError) return <div>Failed to load products</div>
+  if (!products || !optionSets) return <div>Loading...</div>
 
-  console.log('data: ', data)
+  console.log('products: ', products)
+  console.log('optionSets: ', optionSets)
 
   return (
     <Layout>
       <h1>Products</h1>
-      <Products products={data} />
+      <Products products={products} />
     </Layout>
   )
 }

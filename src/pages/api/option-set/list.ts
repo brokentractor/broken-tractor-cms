@@ -10,7 +10,7 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
       throw new Error('BIGCOMMERCE_ACCESS_TOKEN is not defined')
     }
 
-    const response = await fetch(`${BIGCOMMERCE_BASE_URL}/v3/catalog/products`, {
+    const response = await fetch(`${BIGCOMMERCE_BASE_URL}/v2/option_sets`, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
     }
 
     const responseData = await response.json()
-    res.status(200).json(responseData.data)
+    res.status(200).json(responseData)
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   catch (error: any) {

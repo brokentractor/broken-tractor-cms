@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import dayjs from 'dayjs'
-import type { TProduct } from '@/interfaces/Product'
+import type { TProduct } from '@/interfaces/product'
 
 type ProductsProps = {
   products: TProduct[]
