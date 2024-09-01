@@ -4,6 +4,7 @@ import { updateProduct } from '@/data/api/product'
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, 
 } from '@/components/ui/dialog'
+import Spinner from '../Spinner'
 import type { TProduct } from '@/interfaces/product'
 
 type EditModalProps = {
@@ -67,18 +68,18 @@ const EditModal = ({ product }: EditModalProps) => {
           <div className='flex items-center justify-center gap-2'>
             <button 
               type="submit" 
-              className="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:hover:bg-gray-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:dark:bg-gray-300 disabled:dark:hover:bg-gray-300"
+              className="h-10 w-44 rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:hover:bg-gray-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:dark:bg-gray-300 disabled:dark:hover:bg-gray-300"
               disabled={!optionSetID || optionSetID === product.option_set_id?.toString() || optionSetID === '0'}
             >
               Update Option Set
             </button>
             <button 
               type="submit" 
-              className="rounded-lg bg-red-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:hover:bg-gray-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 disabled:dark:bg-gray-300 disabled:dark:hover:bg-gray-300"
+              className="flex h-10 w-44 items-center justify-center rounded-lg bg-red-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:hover:bg-gray-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 disabled:dark:bg-gray-300 disabled:dark:hover:bg-gray-300"
               disabled={!product.option_set_id}
               onClick={removeOptionSetID}
             >
-              {loading ? 'Loading' : 'Remove Option Set'}
+              {loading ? <Spinner /> : 'Remove option set'}
             </button>
 
           </div>
