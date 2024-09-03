@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import useSWR from 'swr'
 
 import { getOptionSets } from '@/data/api/option-set'
@@ -6,6 +6,7 @@ import { getProducts } from '@/data/api/product'
 import Layout from '@/components/Layout'
 import Products from '@/components/Products'
 import Spinner from '@/components/Spinner'
+import type { TProduct } from '@/interfaces/product'
 
 type FetcherProps = [string, number, number]
 
@@ -16,31 +17,25 @@ const fetcher = async ([ , page, limit ]: FetcherProps) => {
 
 const HomePage = () => {
   const [ page, setPage ] = useState<number>(1)
-  const [ loadingMore, setLoadingMore ] = useState<boolean>(false)
+  const [ products, setProducts ] = useState<TProduct[]>([])
 
   const LIMIT = 20
 
-  const { data: products, error: productsError, mutate } = useSWR(
+  const { data: newProducts, error: productsError, mutate } = useSWR(
     [ '/api/product/list', page, LIMIT ],
     fetcher,
   )
   
   const { data: optionSets, error: optionSetsError } = useSWR('option-sets', getOptionSets)
 
+  useEffect(() => {
+    if (newProducts) {
+      setProducts((prevProducts) => [ ...prevProducts, ...newProducts ])
+    }
+  }, [ newProducts ])
+
   const loadMore = () => {
-    setLoadingMore(true)
-    const newPage = page + 1
-    setPage(newPage)
-  
-    getProducts(newPage, LIMIT).then((newProducts) => {
-      if (newProducts && products) {
-        mutate([ ...products, ...newProducts ], false)  // Append new products to existing ones
-      }
-    }).catch((error) => {
-      console.error('Failed to load more products:', error)
-    }).finally(() => {
-      setLoadingMore(false)  // Ensure loading state is reset
-    })
+    setPage((prevPage) => prevPage + 1)
   }
 
   if (productsError || optionSetsError) {
@@ -72,9 +67,9 @@ const HomePage = () => {
       <Products 
         products={products}
         optionSets={optionSets}
-        mutate={mutate}
         loadMore={loadMore}
-        loadingMore={loadingMore}
+        mutate={mutate}
+        loadingMore={!newProducts && page > 1} // Only show loading state for "Load More" button
       />
     </Layout>
   )
