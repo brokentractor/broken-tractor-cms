@@ -79,7 +79,7 @@ const Products = ({
           </select>
         </div>
         <div className="flex items-center justify-center">
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <span className="-translate-y-2 text-sm font-medium text-gray-700 dark:text-gray-300">
             Currently showing <em>{filteredProducts.length}</em> products
           </span>
         </div>
