@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import useSWR from 'swr'
 
 import { getOptionSets } from '@/data/api/option-set'
@@ -6,8 +7,20 @@ import Layout from '@/components/Layout'
 import Products from '@/components/Products'
 import Spinner from '@/components/Spinner'
 
+type FetcherProps = [string, number, number]
+
+const fetcher = async ([ , page, limit ]: FetcherProps) => {
+  const products = await getProducts(page, limit)
+  return products
+}
+
 const HomePage = () => {
-  const { data: products, error: productsError, mutate } = useSWR('products', getProducts)
+  const [ page ] = useState<number>(1)
+
+  const { data: products, error: productsError, mutate } = useSWR(
+    [ '/api/product/list', page, 20 ],
+    fetcher,
+  )
   const { data: optionSets, error: optionSetsError } = useSWR('option-sets', getOptionSets)
 
   if (productsError || optionSetsError) {
