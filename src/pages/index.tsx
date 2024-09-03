@@ -19,7 +19,7 @@ const HomePage = () => {
   const [ page, setPage ] = useState<number>(1)
   const [ products, setProducts ] = useState<TProduct[]>([])
 
-  const LIMIT = 20
+  const LIMIT = 250
 
   const { data: newProducts, error: productsError, mutate } = useSWR(
     [ '/api/product/list', page, LIMIT ],

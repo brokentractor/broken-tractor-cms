@@ -62,11 +62,11 @@ const Products = ({
   
   return (
     <div className="my-20 w-[900px]">
-      <div className='mb-2 flex w-full justify-between gap-4'>
-        <div>
+      <div className='fixed top-0 z-10 mb-2 flex w-full max-w-[900px] justify-between gap-4 bg-white pt-16'>
+        <div className="flex-1">
           <select 
             id="optionSetSelect" 
-            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            className="block rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
             value={filterOptionSetID || ''}
             onChange={(e) => setFilterOptionSetID(parseInt(e.target.value))}
           >
@@ -78,13 +78,20 @@ const Products = ({
             ))}
           </select>
         </div>
-        <BatchEditModal 
-          selectedProducts={selectedProducts}
-          mutate={mutate}
-          optionSets={optionSets}
-        />
+        <div className="flex items-center justify-center">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Currently showing <em>{filteredProducts.length}</em> products
+          </span>
+        </div>
+        <div className="shrink-0">
+          <BatchEditModal 
+            selectedProducts={selectedProducts}
+            mutate={mutate}
+            optionSets={optionSets}
+          />
+        </div>
       </div>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="relative mt-8 overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full table-fixed text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
           <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
