@@ -16,6 +16,7 @@ const fetcher = async ([ , page, limit ]: FetcherProps) => {
 
 const HomePage = () => {
   const [ page, setPage ] = useState<number>(1)
+  const [ loadingMore, setLoadingMore ] = useState<boolean>(false)
 
   const LIMIT = 20
 
@@ -27,6 +28,7 @@ const HomePage = () => {
   const { data: optionSets, error: optionSetsError } = useSWR('option-sets', getOptionSets)
 
   const loadMore = () => {
+    setLoadingMore(true)
     const newPage = page + 1
     setPage(newPage)
   
@@ -36,6 +38,8 @@ const HomePage = () => {
       }
     }).catch((error) => {
       console.error('Failed to load more products:', error)
+    }).finally(() => {
+      setLoadingMore(false)  // Ensure loading state is reset
     })
   }
 
@@ -70,6 +74,7 @@ const HomePage = () => {
         optionSets={optionSets}
         mutate={mutate}
         loadMore={loadMore}
+        loadingMore={loadingMore}
       />
     </Layout>
   )

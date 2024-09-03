@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 
+import Spinner from '../Spinner'
 import BatchEditModal from './BatchEditModal'
 import EditModal from './EditModal'
 import type { TOptionSet } from '@/interfaces/option-set'
@@ -12,10 +13,11 @@ type ProductsProps = {
   optionSets: TOptionSet[]
   mutate: KeyedMutator<TProduct[]>
   loadMore: () => void
+  loadingMore: boolean
 }
 
 const Products = ({
-  products, optionSets, mutate, loadMore, 
+  products, optionSets, mutate, loadMore, loadingMore, 
 }: ProductsProps) => {
   const [ selectedProducts, setSelectedProducts ] = useState<Set<number>>(new Set())
   const [ selectAll, setSelectAll ] = useState(false)
@@ -148,10 +150,11 @@ const Products = ({
       </div>
       <div className="mt-8 text-center">
         <button 
-          className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+          className={`rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 ${loadingMore ? 'cursor-not-allowed' : ''}`}
           onClick={loadMore}
+          disabled={loadingMore}
         >
-          Load More
+          {loadingMore ? <Spinner /> : 'Load More'}
         </button>
       </div>
     </div>
