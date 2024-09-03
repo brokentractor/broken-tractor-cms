@@ -11,15 +11,16 @@ type ProductsProps = {
   products: TProduct[]
   optionSets: TOptionSet[]
   mutate: KeyedMutator<TProduct[]>
+  loadMore: () => void
 }
 
-const Products = ({ products, optionSets, mutate }: ProductsProps) => {
+const Products = ({
+  products, optionSets, mutate, loadMore, 
+}: ProductsProps) => {
   const [ selectedProducts, setSelectedProducts ] = useState<Set<number>>(new Set())
   const [ selectAll, setSelectAll ] = useState(false)
   const [ filterOptionSetID, setFilterOptionSetID ] = useState<number | undefined>(undefined)
   const [ filteredProducts, setFilteredProducts ] = useState<TProduct[]>(products)
-
-  console.log('filterOptionSetID: ', filterOptionSetID)
 
   const handleCheckboxChange = (productId: number) => {
     setSelectedProducts((prevSelected) => {
@@ -144,6 +145,14 @@ const Products = ({ products, optionSets, mutate }: ProductsProps) => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="mt-8 text-center">
+        <button 
+          className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+          onClick={loadMore}
+        >
+          Load More
+        </button>
       </div>
     </div>
   )

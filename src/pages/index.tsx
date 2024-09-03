@@ -15,13 +15,29 @@ const fetcher = async ([ , page, limit ]: FetcherProps) => {
 }
 
 const HomePage = () => {
-  const [ page ] = useState<number>(1)
+  const [ page, setPage ] = useState<number>(1)
+
+  const LIMIT = 20
 
   const { data: products, error: productsError, mutate } = useSWR(
-    [ '/api/product/list', page, 20 ],
+    [ '/api/product/list', page, LIMIT ],
     fetcher,
   )
+  
   const { data: optionSets, error: optionSetsError } = useSWR('option-sets', getOptionSets)
+
+  const loadMore = () => {
+    const newPage = page + 1
+    setPage(newPage)
+  
+    getProducts(newPage, LIMIT).then((newProducts) => {
+      if (newProducts && products) {
+        mutate([ ...products, ...newProducts ], false)  // Append new products to existing ones
+      }
+    }).catch((error) => {
+      console.error('Failed to load more products:', error)
+    })
+  }
 
   if (productsError || optionSetsError) {
     return (
@@ -49,7 +65,12 @@ const HomePage = () => {
 
   return (
     <Layout>
-      <Products products={products} optionSets={optionSets} mutate={mutate}/>
+      <Products 
+        products={products}
+        optionSets={optionSets}
+        mutate={mutate}
+        loadMore={loadMore}
+      />
     </Layout>
   )
 }
