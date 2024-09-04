@@ -10,7 +10,7 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
       throw new Error('BIGCOMMERCE_ACCESS_TOKEN is not defined')
     }
 
-    const response = await fetch(`${BIGCOMMERCE_BASE_URL}/option_sets`, {
+    const response = await fetch(`${BIGCOMMERCE_BASE_URL}/option_sets?page=1&limit=250`, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
