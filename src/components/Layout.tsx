@@ -8,9 +8,12 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <main className="flex min-h-screen flex-col">
+    <main className="flex min-h-screen">
+      {/* Sidebar */}
       <Header />
-      <div className="flex w-full items-center justify-center">
+
+      {/* Main content */}
+      <div className="ml-64 flex flex-1 items-center justify-center">
         {children}
       </div>
     </main>

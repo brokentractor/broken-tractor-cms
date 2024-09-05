@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import Spinner from '../Spinner'
 import BatchEditModal from './BatchEditModal'
 import EditModal from './EditModal'
+import UpdateSuccessModal from './UpdateSuccessModal'
 import type { TOptionSet } from '@/interfaces/option-set'
 import type { TProduct } from '@/interfaces/product'
 import type { KeyedMutator } from 'swr'
@@ -23,6 +24,8 @@ const Products = ({
   const [ selectAll, setSelectAll ] = useState(false)
   const [ filterOptionSetID, setFilterOptionSetID ] = useState<number | undefined>(undefined)
   const [ filteredProducts, setFilteredProducts ] = useState<TProduct[]>(products)
+  const [ openEditModal, setOpenEditModal ] = useState(false)
+  const [ openUpdateSuccessModal, setOpenUpdateSuccessModal ] = useState(false)
 
   const handleCheckboxChange = (productId: number) => {
     setSelectedProducts((prevSelected) => {
@@ -61,12 +64,24 @@ const Products = ({
   }, [ filterOptionSetID, products ])
   
   return (
-    <div className="my-20 w-[900px]">
-      <div className='fixed top-0 z-10 mb-2 flex w-full max-w-[900px] justify-between gap-4 bg-white pt-16'>
+    <div className="relative my-20 w-full px-10">
+      <div className='fixed right-10 top-0 z-10 mb-2 flex w-[calc(100vw-336px)] justify-between gap-4 bg-white pt-10'>
+        <form className="mx-auto max-w-md">   
+          <label htmlFor="default-search" className="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white">Search</label>
+          <div className="relative">
+            <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+              <svg className="size-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+              </svg>
+            </div>
+            <input type="search" id="default-search" className="block w-full border border-gray-300 bg-gray-50 px-4 py-2.5 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500" placeholder="Search Mockups, Logos..." required />
+          </div>
+        </form>
+
         <div className="flex-1">
           <select 
             id="optionSetSelect" 
-            className="block rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            className="block border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
             value={filterOptionSetID || ''}
             onChange={(e) => setFilterOptionSetID(parseInt(e.target.value))}
           >
@@ -91,7 +106,7 @@ const Products = ({
           />
         </div>
       </div>
-      <div className="relative mt-8 overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="relative mt-8 overflow-x-auto shadow-md">
         <table className="w-full table-fixed text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
           <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -102,7 +117,7 @@ const Products = ({
                     type="checkbox"
                     checked={selectAll}
                     onChange={handleSelectAllChange}
-                    className="size-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+                    className="size-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
                   />
                   <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
                 </div>
@@ -148,7 +163,14 @@ const Products = ({
                   {dayjs(product.date_created).format('MM/DD/YYYY')}
                 </td>
                 <td className="flex items-center px-6 py-4">
-                  <EditModal product={product} optionSets={optionSets} mutate={mutate} />
+                  <EditModal 
+                    product={product}
+                    optionSets={optionSets}
+                    mutate={mutate}
+                    openEditModal={openEditModal}
+                    setOpenEditModal={setOpenEditModal}
+                    setOpenUpdateSuccessModal={setOpenUpdateSuccessModal}
+                  />
                 </td>
               </tr>
             ))}
@@ -157,13 +179,18 @@ const Products = ({
       </div>
       <div className="mt-8 text-center">
         <button 
-          className={`rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 ${loadingMore ? 'cursor-not-allowed' : ''}`}
+          className={`min-w-12 bg-[#FEBD00] px-4 py-2 font-bold text-black shadow-sm hover:opacity-80 ${loadingMore ? 'cursor-not-allowed' : ''}`}
           onClick={loadMore}
           disabled={loadingMore}
         >
           {loadingMore ? <Spinner /> : 'Load More'}
         </button>
       </div>
+      <UpdateSuccessModal 
+        openUpdateSuccessModal={openUpdateSuccessModal}
+        setOpenUpdateSuccessModal={setOpenUpdateSuccessModal}
+        setOpenEditModal={setOpenEditModal}
+      />
     </div>
   )
 }
