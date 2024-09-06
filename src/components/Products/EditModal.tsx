@@ -3,7 +3,7 @@ import type { Dispatch, SetStateAction } from 'react'
 import { useState } from 'react'
 import { updateProduct } from '@/data/api/product'
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, 
+  Dialog, DialogContent, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog'
 import Spinner from '../Spinner'
 import type { TOptionSet } from '@/interfaces/option-set'
@@ -11,7 +11,7 @@ import type { TProduct } from '@/interfaces/product'
 import type { KeyedMutator } from 'swr'
 
 type EditModalProps = {
-  product: TProduct
+  product: TProduct | undefined
   optionSets: TOptionSet[]
   mutate: KeyedMutator<TProduct[]>
   openEditModal: boolean
@@ -23,15 +23,20 @@ const EditModal = ({
   product,
   optionSets,
   // mutate,
-  // openEditModal,
-  // setOpenEditModal,
+  openEditModal,
+  setOpenEditModal,
   setOpenUpdateSuccessModal,
 }: EditModalProps) => {
   const [ removeLoading, setRemoveLoading ] = useState(false)
   const [ updateLoading, setUpdateLoading ] = useState(false)
+
   const [ optionSetID, setOptionSetID ] = useState<number | undefined>(
-    product.option_set_id !== null ? product.option_set_id : undefined,
+    product?.option_set_id !== null ? product?.option_set_id : undefined,
   )
+
+  if(!product) {
+    return
+  }
 
   const removeOptionSetID = async () => {
     setRemoveLoading(true)
@@ -69,12 +74,7 @@ const EditModal = ({
   }
 
   return (
-    <Dialog>
-      <DialogTrigger>
-        <a href="#" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
-          Edit
-        </a>
-      </DialogTrigger>
+    <Dialog open={openEditModal} onOpenChange={setOpenEditModal}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{product.name}</DialogTitle>

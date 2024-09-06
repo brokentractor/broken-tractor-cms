@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Pencil2Icon } from '@radix-ui/react-icons'
 import dayjs from 'dayjs'
 
 import Spinner from '../Spinner'
@@ -20,6 +21,7 @@ type ProductsProps = {
 const Products = ({
   products, optionSets, mutate, loadMore, loadingMore, 
 }: ProductsProps) => {
+  const [ productCurrentlyEditing, setProductCurrentlyEditing ] = useState<TProduct | undefined>(undefined)
   const [ selectedProducts, setSelectedProducts ] = useState<Set<number>>(new Set())
   const [ selectAll, setSelectAll ] = useState(false)
   const [ filterOptionSetID, setFilterOptionSetID ] = useState<number | undefined>(undefined)
@@ -81,7 +83,7 @@ const Products = ({
         <div className="flex-1">
           <select 
             id="optionSetSelect" 
-            className="block border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            className="block border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
             value={filterOptionSetID || ''}
             onChange={(e) => setFilterOptionSetID(parseInt(e.target.value))}
           >
@@ -117,7 +119,7 @@ const Products = ({
                     type="checkbox"
                     checked={selectAll}
                     onChange={handleSelectAllChange}
-                    className="size-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+                    className="size-4 border-gray-300 bg-gray-100 text-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
                   />
                   <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
                 </div>
@@ -146,7 +148,7 @@ const Products = ({
                       type="checkbox"
                       checked={selectedProducts.has(product.id)}
                       onChange={() => handleCheckboxChange(product.id)}
-                      className="size-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
+                      className="size-4 rounded  border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
                     />
                     <label htmlFor="checkbox-table-search-1" className="sr-only">checkbox</label>
                   </div>
@@ -163,14 +165,15 @@ const Products = ({
                   {dayjs(product.date_created).format('MM/DD/YYYY')}
                 </td>
                 <td className="flex items-center px-6 py-4">
-                  <EditModal 
-                    product={product}
-                    optionSets={optionSets}
-                    mutate={mutate}
-                    openEditModal={openEditModal}
-                    setOpenEditModal={setOpenEditModal}
-                    setOpenUpdateSuccessModal={setOpenUpdateSuccessModal}
-                  />
+                  <button 
+                    onClick={() => {
+                      setProductCurrentlyEditing(product)
+                      setOpenEditModal(true)
+                    }}
+                    className="bg-[#FEBD00] p-2 font-medium text-black hover:underline dark:opacity-80"
+                  >
+                    <Pencil2Icon />
+                  </button>
                 </td>
               </tr>
             ))}
@@ -186,6 +189,14 @@ const Products = ({
           {loadingMore ? <Spinner /> : 'Load More'}
         </button>
       </div>
+      <EditModal 
+        product={productCurrentlyEditing}
+        optionSets={optionSets}
+        mutate={mutate}
+        openEditModal={openEditModal}
+        setOpenEditModal={setOpenEditModal}
+        setOpenUpdateSuccessModal={setOpenUpdateSuccessModal}
+      />
       <UpdateSuccessModal 
         openUpdateSuccessModal={openUpdateSuccessModal}
         setOpenUpdateSuccessModal={setOpenUpdateSuccessModal}

@@ -88,6 +88,12 @@ body {
   }
 }
 
+input[type="checkbox"] {
+  accent-color: #FEBD00;
+  outline: none;
+  @apply focus:ring-transparent;
+}
+
 @layer base {
   * {
     @apply border-border;
