@@ -86,7 +86,10 @@ const Products = ({
             id="optionSetSelect" 
             className="block border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
             value={filterOptionSetID || ''}
-            onChange={(e) => setFilterOptionSetID(parseInt(e.target.value))}
+            onChange={(e) => {
+              setFilterOptionSetID(parseInt(e.target.value))
+              setSelectedProducts(new Set())
+            }}
           >
             <option value={undefined}>Filter by option set</option>
             {optionSets.map((optionSet) => (
