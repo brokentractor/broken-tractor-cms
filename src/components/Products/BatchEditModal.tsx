@@ -7,15 +7,12 @@ import {
 } from '@/components/ui/dialog'
 import Spinner from '../Spinner'
 import type { TOptionSet } from '@/interfaces/option-set'
-import type { TProduct } from '@/interfaces/product'
-import type { KeyedMutator } from 'swr'
 
 type BatchEditModalProps = {
   openBatchEditModal: boolean
   setOpenBatchEditModal: Dispatch<SetStateAction<boolean>>
   selectedProducts: Set<number>
   optionSets: TOptionSet[]
-  mutate: KeyedMutator<TProduct[]>
   setOpenUpdateSuccessModal: Dispatch<SetStateAction<boolean>>
   setUpdateType: Dispatch<SetStateAction<'update' | 'delete'>>
 }
@@ -25,7 +22,6 @@ const BatchEditModal = ({
   setOpenBatchEditModal,
   selectedProducts,
   optionSets,
-  mutate,
   setOpenUpdateSuccessModal,
   setUpdateType,
 }: BatchEditModalProps) => {
@@ -52,7 +48,6 @@ const BatchEditModal = ({
         setUpdateType('update')
         setUpdateLoading(false)
         setOpenUpdateSuccessModal(true)
-        mutate()
       }
     }
   }
@@ -75,7 +70,6 @@ const BatchEditModal = ({
       setUpdateType('delete')
       setRemoveLoading(false)
       setOpenUpdateSuccessModal(true)
-      mutate()
     }
   }
 

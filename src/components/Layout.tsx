@@ -13,7 +13,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Header />
 
       {/* Main content */}
-      <div className="ml-64 flex flex-1 items-center justify-center">
+      <div className="ml-64 flex justify-center">
         {children}
       </div>
     </main>

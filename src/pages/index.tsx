@@ -21,7 +21,7 @@ const HomePage = () => {
 
   const LIMIT = 250
 
-  const { data: newProducts, error: productsError, mutate } = useSWR(
+  const { data: newProducts, error: productsError } = useSWR(
     [ '/api/product/list', page, LIMIT ],
     fetcher,
   )
@@ -68,7 +68,6 @@ const HomePage = () => {
         products={products}
         optionSets={optionSets}
         loadMore={loadMore}
-        mutate={mutate}
         loadingMore={!newProducts && page > 1} // Only show loading state for "Load More" button
       />
     </Layout>

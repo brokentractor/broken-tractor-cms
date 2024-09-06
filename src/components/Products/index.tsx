@@ -8,23 +8,21 @@ import EditModal from './EditModal'
 import UpdateSuccessModal from './UpdateSuccessModal'
 import type { TOptionSet } from '@/interfaces/option-set'
 import type { TProduct } from '@/interfaces/product'
-import type { KeyedMutator } from 'swr'
 
 type ProductsProps = {
   products: TProduct[]
   optionSets: TOptionSet[]
-  mutate: KeyedMutator<TProduct[]>
   loadMore: () => void
   loadingMore: boolean
 }
 
 const Products = ({
-  products, optionSets, mutate, loadMore, loadingMore, 
+  products, optionSets, loadMore, loadingMore, 
 }: ProductsProps) => {
-  const [ productCurrentlyEditing, setProductCurrentlyEditing ] = useState<TProduct | undefined>(undefined)
+  const [ productCurrentlyEditing, setProductCurrentlyEditing ] = useState<TProduct>()
   const [ selectedProducts, setSelectedProducts ] = useState<Set<number>>(new Set())
   const [ selectAll, setSelectAll ] = useState(false)
-  const [ filterOptionSetID, setFilterOptionSetID ] = useState<number | undefined>(undefined)
+  const [ filterOptionSetID, setFilterOptionSetID ] = useState<number>()
   const [ filteredProducts, setFilteredProducts ] = useState<TProduct[]>(products)
   const [ openEditModal, setOpenEditModal ] = useState(false)
   const [ openBatchEditModal, setOpenBatchEditModal ] = useState(false)
@@ -198,7 +196,6 @@ const Products = ({
         openBatchEditModal={openBatchEditModal}
         setOpenBatchEditModal={setOpenBatchEditModal}
         selectedProducts={selectedProducts}
-        mutate={mutate}
         optionSets={optionSets}
         setOpenUpdateSuccessModal={setOpenUpdateSuccessModal}
         setUpdateType={setUpdateType}
@@ -206,7 +203,6 @@ const Products = ({
       <EditModal 
         product={productCurrentlyEditing}
         optionSets={optionSets}
-        mutate={mutate}
         openEditModal={openEditModal}
         setOpenEditModal={setOpenEditModal}
         setOpenUpdateSuccessModal={setOpenUpdateSuccessModal}
