@@ -199,6 +199,7 @@ const Products = ({
         optionSets={optionSets}
         setOpenUpdateSuccessModal={setOpenUpdateSuccessModal}
         setUpdateType={setUpdateType}
+        filteredProducts={filteredProducts}
       />
       <EditModal 
         product={productCurrentlyEditing}
