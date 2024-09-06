@@ -28,6 +28,8 @@ const Products = ({
   const [ filteredProducts, setFilteredProducts ] = useState<TProduct[]>(products)
   const [ openEditModal, setOpenEditModal ] = useState(false)
   const [ openUpdateSuccessModal, setOpenUpdateSuccessModal ] = useState(false)
+  const [ updateType, setUpdateType ] = useState<'update' | 'delete'>('update')
+
 
   const handleCheckboxChange = (productId: number) => {
     setSelectedProducts((prevSelected) => {
@@ -196,11 +198,13 @@ const Products = ({
         openEditModal={openEditModal}
         setOpenEditModal={setOpenEditModal}
         setOpenUpdateSuccessModal={setOpenUpdateSuccessModal}
+        setUpdateType={setUpdateType}
       />
       <UpdateSuccessModal 
         openUpdateSuccessModal={openUpdateSuccessModal}
         setOpenUpdateSuccessModal={setOpenUpdateSuccessModal}
         setOpenEditModal={setOpenEditModal}
+        updateType={updateType}
       />
     </div>
   )
