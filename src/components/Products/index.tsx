@@ -27,6 +27,7 @@ const Products = ({
   const [ filterOptionSetID, setFilterOptionSetID ] = useState<number | undefined>(undefined)
   const [ filteredProducts, setFilteredProducts ] = useState<TProduct[]>(products)
   const [ openEditModal, setOpenEditModal ] = useState(false)
+  const [ openBatchEditModal, setOpenBatchEditModal ] = useState(false)
   const [ openUpdateSuccessModal, setOpenUpdateSuccessModal ] = useState(false)
   const [ updateType, setUpdateType ] = useState<'update' | 'delete'>('update')
 
@@ -103,11 +104,13 @@ const Products = ({
           </span>
         </div>
         <div className="shrink-0">
-          <BatchEditModal 
-            selectedProducts={selectedProducts}
-            mutate={mutate}
-            optionSets={optionSets}
-          />
+          <button
+            onClick={() => {setOpenBatchEditModal(true)}}
+            className="mb-4 h-10 items-center justify-center bg-[#FEBD00] px-5 py-2.5 text-center text-sm font-bold text-black shadow-sm hover:opacity-80 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:hover:bg-gray-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:dark:bg-gray-300 disabled:dark:hover:bg-gray-300"
+            disabled={selectedProducts.size < 1}
+          >
+            Edit selected products
+          </button>
         </div>
       </div>
       <div className="relative mt-8 overflow-x-auto shadow-md">
@@ -191,6 +194,15 @@ const Products = ({
           {loadingMore ? <Spinner /> : 'Load More'}
         </button>
       </div>
+      <BatchEditModal
+        openBatchEditModal={openBatchEditModal}
+        setOpenBatchEditModal={setOpenBatchEditModal}
+        selectedProducts={selectedProducts}
+        mutate={mutate}
+        optionSets={optionSets}
+        setOpenUpdateSuccessModal={setOpenUpdateSuccessModal}
+        setUpdateType={setUpdateType}
+      />
       <EditModal 
         product={productCurrentlyEditing}
         optionSets={optionSets}
@@ -204,6 +216,7 @@ const Products = ({
         openUpdateSuccessModal={openUpdateSuccessModal}
         setOpenUpdateSuccessModal={setOpenUpdateSuccessModal}
         setOpenEditModal={setOpenEditModal}
+        setOpenBatchEditModal={setOpenBatchEditModal}
         updateType={updateType}
       />
     </div>

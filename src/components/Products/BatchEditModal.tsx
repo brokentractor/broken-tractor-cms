@@ -1,8 +1,9 @@
 
+import type { Dispatch, SetStateAction } from 'react'
 import { useState } from 'react'
 import { updateProduct } from '@/data/api/product'
 import {
-  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, 
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, 
 } from '@/components/ui/dialog'
 import Spinner from '../Spinner'
 import type { TOptionSet } from '@/interfaces/option-set'
@@ -10,35 +11,27 @@ import type { TProduct } from '@/interfaces/product'
 import type { KeyedMutator } from 'swr'
 
 type BatchEditModalProps = {
+  openBatchEditModal: boolean
+  setOpenBatchEditModal: Dispatch<SetStateAction<boolean>>
   selectedProducts: Set<number>
   optionSets: TOptionSet[]
   mutate: KeyedMutator<TProduct[]>
+  setOpenUpdateSuccessModal: Dispatch<SetStateAction<boolean>>
+  setUpdateType: Dispatch<SetStateAction<'update' | 'delete'>>
 }
 
-const BatchEditModal = ({ selectedProducts, optionSets, mutate }: BatchEditModalProps) => {
+const BatchEditModal = ({
+  openBatchEditModal,
+  setOpenBatchEditModal,
+  selectedProducts,
+  optionSets,
+  mutate,
+  setOpenUpdateSuccessModal,
+  setUpdateType,
+}: BatchEditModalProps) => {
   const [ removeLoading, setRemoveLoading ] = useState(false)
   const [ updateLoading, setUpdateLoading ] = useState(false)
   const [ optionSetID, setOptionSetID ] = useState<number | undefined>(undefined)
-
-  const batchRemoveOptionSetID = async () => {
-    setRemoveLoading(true)
-  
-    try {
-      const updatePromises = Array.from(selectedProducts).map((id) =>
-        updateProduct(id.toString(), { option_set_id: null }),
-      )
-  
-      await Promise.all(updatePromises)
-    }
-    catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Failed to update products:', error)
-    }
-    finally {
-      setRemoveLoading(false)
-      mutate()
-    }
-  }
 
   const batchUpdateOptionSetID = async () => {
     setUpdateLoading(true)
@@ -56,22 +49,38 @@ const BatchEditModal = ({ selectedProducts, optionSets, mutate }: BatchEditModal
         console.error('Failed to update products:', error)
       }
       finally {
+        setUpdateType('update')
         setUpdateLoading(false)
+        setOpenUpdateSuccessModal(true)
         mutate()
       }
     }
   }
 
+  const batchRemoveOptionSetID = async () => {
+    setRemoveLoading(true)
+  
+    try {
+      const updatePromises = Array.from(selectedProducts).map((id) =>
+        updateProduct(id.toString(), { option_set_id: null }),
+      )
+  
+      await Promise.all(updatePromises)
+    }
+    catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Failed to update products:', error)
+    }
+    finally {
+      setUpdateType('delete')
+      setRemoveLoading(false)
+      setOpenUpdateSuccessModal(true)
+      mutate()
+    }
+  }
+
   return (
-    <Dialog>
-      <DialogTrigger>
-        <button 
-          className="mb-4 h-10 items-center justify-center bg-[#FEBD00] px-5 py-2.5 text-center text-sm font-bold text-black shadow-sm hover:opacity-80 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:hover:bg-gray-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:dark:bg-gray-300 disabled:dark:hover:bg-gray-300"
-          disabled={selectedProducts.size < 1}
-        >
-        Edit selected products
-        </button>
-      </DialogTrigger>
+    <Dialog open={openBatchEditModal} onOpenChange={setOpenBatchEditModal}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Batch Update</DialogTitle>
