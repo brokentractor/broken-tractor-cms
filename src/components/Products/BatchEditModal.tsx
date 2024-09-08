@@ -7,16 +7,15 @@ import {
 } from '@/components/ui/dialog'
 import Spinner from '../Spinner'
 import type { TOptionSet } from '@/interfaces/option-set'
-import type { TProduct } from '@/interfaces/product'
 
 type BatchEditModalProps = {
   openBatchEditModal: boolean
   setOpenBatchEditModal: Dispatch<SetStateAction<boolean>>
   selectedProducts: Set<number>
   optionSets: TOptionSet[]
-  filteredProducts: TProduct[]
   setOpenUpdateSuccessModal: Dispatch<SetStateAction<boolean>>
   setUpdateType: Dispatch<SetStateAction<'update' | 'delete'>>
+  handleBatchUpdateFrontendData: (optionSetID?: number) => void
 }
 
 const BatchEditModal = ({
@@ -24,9 +23,9 @@ const BatchEditModal = ({
   setOpenBatchEditModal,
   selectedProducts,
   optionSets,
-  filteredProducts,
   setOpenUpdateSuccessModal,
   setUpdateType,
+  handleBatchUpdateFrontendData,
 }: BatchEditModalProps) => {
   const [ removeLoading, setRemoveLoading ] = useState(false)
   const [ updateLoading, setUpdateLoading ] = useState(false)
@@ -42,6 +41,8 @@ const BatchEditModal = ({
         )
     
         await Promise.all(updatePromises)
+
+        handleBatchUpdateFrontendData(optionSetID)
       }
       catch (error) {
         // eslint-disable-next-line no-console
@@ -64,16 +65,10 @@ const BatchEditModal = ({
       )
   
       await Promise.all(updatePromises)
-
-      selectedProducts.forEach((id) => {
-        const filteredProduct = filteredProducts.find((p) => p.id === id)
-        if (filteredProduct && optionSetID) {
-          filteredProduct.option_set_id = optionSetID
-        }
-      })
+  
+      handleBatchUpdateFrontendData()
     }
     catch (error) {
-      // eslint-disable-next-line no-console
       console.error('Failed to update products:', error)
     }
     finally {
@@ -82,6 +77,7 @@ const BatchEditModal = ({
       setOpenUpdateSuccessModal(true)
     }
   }
+  
 
   return (
     <Dialog open={openBatchEditModal} onOpenChange={setOpenBatchEditModal}>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Pencil2Icon } from '@radix-ui/react-icons'
 import dayjs from 'dayjs'
 
@@ -65,10 +65,29 @@ const Products = ({
       setFilteredProducts(products)
     }
   }, [ filterOptionSetID, products ])
+
+
+  const handleBatchUpdateFrontendData = useCallback((optionSetID?: number) => {
+    setFilteredProducts((prevFilteredProducts) => {
+      const updatedProducts = prevFilteredProducts.map((product) =>
+        selectedProducts.has(product.id)
+          ? { ...product, option_set_id: optionSetID ?? null }
+          : product,
+      )
+      return updatedProducts
+    })
+  
+    setSelectedProducts(new Set())
+  }, [ selectedProducts ])
+  
+  
+  
+  
+  
   
   return (
     <div className="relative my-20 w-full px-10">
-      <div className='fixed right-10 top-0 z-10 mb-2 flex w-[calc(100vw-350px)] justify-between gap-4 bg-white pt-10'>
+      <div className='fixed right-10 top-0 z-10 mb-2 flex w-[calc(100vw-336px)] justify-between gap-4 bg-white pt-10'>
 
 
         <div className="flex-1">
@@ -192,7 +211,7 @@ const Products = ({
         optionSets={optionSets}
         setOpenUpdateSuccessModal={setOpenUpdateSuccessModal}
         setUpdateType={setUpdateType}
-        filteredProducts={filteredProducts}
+        handleBatchUpdateFrontendData={handleBatchUpdateFrontendData}
       />
       <EditModal 
         product={productCurrentlyEditing}

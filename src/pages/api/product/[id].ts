@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const responseData = await response.json()
-    res.status(200).json(responseData.data)
+    res.status(200).json(responseData)
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   catch (error: any) {
