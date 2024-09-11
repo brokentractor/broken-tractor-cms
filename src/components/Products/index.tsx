@@ -47,7 +47,7 @@ const Products = ({
     setSelectAll((prevSelectAll) => {
       const newSelectAll = !prevSelectAll
       if (newSelectAll) {
-        const allIds = products.map((product) => product.id)
+        const allIds = filteredProducts.map((product) => product.id)
         setSelectedProducts(new Set(allIds))
       }
       else {
@@ -80,11 +80,6 @@ const Products = ({
     setSelectedProducts(new Set())
   }, [ selectedProducts ])
   
-  
-  
-  
-  
-  
   return (
     <div className="relative my-20 w-full px-10">
       <div className='fixed right-10 top-0 z-10 mb-2 flex w-[calc(100vw-336px)] justify-between gap-4 bg-white pt-10'>
@@ -93,11 +88,12 @@ const Products = ({
         <div className="flex-1">
           <select 
             id="optionSetSelect" 
-            className="block border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            className="block border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400"
             value={filterOptionSetID || ''}
             onChange={(e) => {
               setFilterOptionSetID(parseInt(e.target.value))
               setSelectedProducts(new Set())
+              setSelectAll(false)
             }}
           >
             <option value={undefined}>Filter by option set</option>
@@ -116,7 +112,7 @@ const Products = ({
         <div className="shrink-0">
           <button
             onClick={() => {setOpenBatchEditModal(true)}}
-            className="mb-4 h-10 items-center justify-center bg-[#FEBD00] px-5 py-2.5 text-center text-sm font-bold text-black shadow-sm hover:opacity-80 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:hover:bg-gray-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:dark:bg-gray-300 disabled:dark:hover:bg-gray-300"
+            className="mb-4 h-10 items-center justify-center bg-[#FEBD00] px-5 py-2.5 text-center text-sm font-bold text-black shadow-sm hover:opacity-80 focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:hover:bg-gray-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:dark:bg-gray-300 disabled:dark:hover:bg-gray-300"
             disabled={selectedProducts.size < 1}
           >
             Edit selected products
